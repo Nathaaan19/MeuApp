@@ -1,24 +1,39 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/use-color-scheme';
-
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+import { useState } from "react";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+
+  const [contador, setContador] = useState(0);
+
+  function incrementarContador() {
+    setContador(contador + 1);
+  }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <>
+      <Text style={styles.titulo}>Contador: {contador}</Text>
+
+      <TouchableOpacity style={styles.botao} onPress={incrementarContador}>
+        <Text>Clique + 1</Text>
+      </TouchableOpacity>
+    </>
   );
 }
+
+const styles = StyleSheet.create({
+  titulo: {
+    marginTop: 10,
+    fontSize: 20,
+    alignSelf: 'center'
+  },
+  botao: {
+    alignSelf: 'center',
+    backgroundColor: '#ddd',
+    marginHorizontal: 10,
+    marginTop: 10,
+    padding: 20,
+    justifyContent: 'center',
+    borderColor: '#000',
+    borderWidth: 1,
+  }
+})
