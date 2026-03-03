@@ -2,7 +2,59 @@ import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function RootLayout() {
-  const [display, setDisplay] = useState(0);
+  const [display, setDisplay] = useState("0");
+  const [primeiroNumero, setPrimeiroNumero] = useState<number | null>(null);
+  const [operacao, setOperacao] = useState<string | null>(null);
+
+  const adicionarNumero = (numero: string) => {
+    if (display === "0") {
+      setDisplay(numero);
+    } else {
+      setDisplay(display + numero);
+    }
+  };
+
+  const limpar = () => {
+    setDisplay("0");
+    setPrimeiroNumero(null);
+    setOperacao(null);
+  };
+
+  const selecionarOperacao = (op: string) => {
+    setPrimeiroNumero(parseFloat(display));
+    setOperacao(op);
+    setDisplay("0");
+  };
+
+  const calcular = () => {
+    if (primeiroNumero === null || operacao === null) return;
+
+    const segundoNumero = parseFloat(display);
+    let resultado = 0;
+
+    if (operacao === "+") {
+      resultado = primeiroNumero + segundoNumero;
+    }
+    else if (operacao === "-") {
+      resultado = primeiroNumero - segundoNumero;
+    }
+    else if (operacao === "*") {
+      resultado = primeiroNumero * segundoNumero;
+    }
+    else if (operacao === "/") {
+      resultado = primeiroNumero / segundoNumero;
+    }
+
+    setDisplay(resultado.toString());
+    setPrimeiroNumero(null);
+    setOperacao(null);
+  };
+
+  const calcularRaiz = () => {
+    const numero = parseFloat(display);
+    const resultado = Math.sqrt(numero);
+    setDisplay(resultado.toString());
+  };
 
   return (
     <View style={styles.container}>
@@ -11,71 +63,71 @@ export default function RootLayout() {
       </View>
 
       <View style={styles.row}>
-        <TouchableOpacity style={styles.buttonSpecial} onPress={() => setDisplay(0)}>
+        <TouchableOpacity style={styles.buttonSpecial} onPress={limpar}>
           <Text style={styles.buttonText}>C</Text>  
         </TouchableOpacity>
         <View style={styles.spacer} />
-        <TouchableOpacity style={styles.buttonGray}>
+        <TouchableOpacity style={styles.buttonGray} onPress={calcularRaiz}>
           <Text style={styles.buttonText}>√</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.row}>
-        <TouchableOpacity style={styles.button} onPress={() => setDisplay(1)}>
+        <TouchableOpacity style={styles.button} onPress={() => adicionarNumero("1")}>
           <Text style={styles.buttonText}>1</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => setDisplay(2)}>
+        <TouchableOpacity style={styles.button} onPress={() => adicionarNumero("2")}>
           <Text style={styles.buttonText}>2</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => setDisplay(3)}>
+        <TouchableOpacity style={styles.button} onPress={() => adicionarNumero("3")}>
           <Text style={styles.buttonText}>3</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonGray}>
+        <TouchableOpacity style={styles.buttonGray} onPress={() => selecionarOperacao("/")}>
           <Text style={styles.buttonText}>÷</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.row}>
-        <TouchableOpacity style={styles.button} onPress={() => setDisplay(4)}>
+        <TouchableOpacity style={styles.button} onPress={() => adicionarNumero("4")}>
           <Text style={styles.buttonText}>4</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => setDisplay(5)}>
+        <TouchableOpacity style={styles.button} onPress={() => adicionarNumero("5")}>
           <Text style={styles.buttonText}>5</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => setDisplay(6)}>
+        <TouchableOpacity style={styles.button} onPress={() => adicionarNumero("6")}>
           <Text style={styles.buttonText}>6</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonGray}>
+        <TouchableOpacity style={styles.buttonGray} onPress={() => selecionarOperacao("*")}>
           <Text style={styles.buttonText}>×</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.row}>
-        <TouchableOpacity style={styles.button} onPress={() => setDisplay(7)}>
+        <TouchableOpacity style={styles.button} onPress={() => adicionarNumero("7")}>
           <Text style={styles.buttonText}>7</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => setDisplay(8)}>
+        <TouchableOpacity style={styles.button} onPress={() => adicionarNumero("8")}>
           <Text style={styles.buttonText}>8</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => setDisplay(9)}>
+        <TouchableOpacity style={styles.button} onPress={() => adicionarNumero("9")}>
           <Text style={styles.buttonText}>9</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonGray}>
+        <TouchableOpacity style={styles.buttonGray} onPress={() => selecionarOperacao("-")}>
           <Text style={styles.buttonText}>−</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.row}>
-        <TouchableOpacity style={styles.button} >
+        <TouchableOpacity style={styles.button} onPress={() => adicionarNumero(".")}>
           <Text style={styles.buttonText}>,</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => setDisplay(0)}>
+        <TouchableOpacity style={styles.button} onPress={() => adicionarNumero("0")}>
           <Text style={styles.buttonText}>0</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={calcular}>
           <Text style={styles.buttonText}>=</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonGray}>
+        <TouchableOpacity style={styles.buttonGray} onPress={() => selecionarOperacao("+")}>
           <Text style={styles.buttonText}>+</Text>
         </TouchableOpacity>
       </View>
